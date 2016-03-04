@@ -89,7 +89,6 @@ def main():
         bust_dealer = False
         turnover_player = False
         turnover_dealer = False
-        bet_value = 0
         dealer_value = 0
         player_value = 0
 
@@ -101,8 +100,8 @@ def main():
             print player_value
         
         print '\nDEALER'
-        print handDealer
-        dealer_value = getHand(handDealer)
+        print "['" + str(handDealer[0]) + "']"
+        dealer_value = getHand(handDealer[0])
         if (number):
             print dealer_value
 
@@ -157,16 +156,31 @@ def main():
             else:
                 turnover_dealer = True
                     
-#        player_value = getHand(handPlayer)
-#        dealer_value = getHand(handDealer)
+        player_value = getHand(handPlayer)
+        dealer_value = getHand(handDealer)
 
-        if (player_value > dealer_value and bust_player == False):
+        if (player_value > dealer_value and bust_player == False or bust_dealer == True):
             print name + " wins!"
             gameNum += 1
             print "Number of games won by " + name + ": " + str(gameNum)
-            bet_value += bet
-        game = False
-    
+            playerMoney += int(bet)
+            print 'You have ${0:0.2f} remaining.'.format(playerMoney)
+        else:
+            print "House wins!"
+            playerMoney -= int(bet)
+            print 'You have ${0:0.2f} remaining.'.format(playerMoney)
+
+        # continue playing?
+        if (playerMoney <= 0):
+            print 'You are out of money!'
+            game = False
+        else:
+            cont_game = raw_input('Would you like to keep playing? (Y/N)\n').lower()
+            if cont_game  in ('no', 'n'):
+                game = False
+            else:
+                os.system('clear')
+
     
     
            #print handPlayer
