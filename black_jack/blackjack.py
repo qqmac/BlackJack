@@ -8,7 +8,7 @@ playerMoney = 1000
 
 #functions
 def bust(name):
-    print "\nBust!\n" + name + " loses."
+    print "\nBust!\n" + name + " loses.\n"
 
 # add a new card to the hand
 def hit(hand):
@@ -72,7 +72,7 @@ def main():
 
     # if player wants to toggle card values
     while(1):
-        Toggle = raw_input ("Would you like to see the card values? (Y/N)\n").lower()
+        Toggle = raw_input ("\nWould you like to see the card values? (Y/N)\n").lower()
         if Toggle in ('yes', 'y'):
             break
         elif Toggle in ('no', 'n'):
@@ -93,17 +93,6 @@ def main():
         player_value = 0
 
         # Player's turn
-        print 'PLAYER'
-        print handPlayer
-        player_value = getHand(handPlayer)
-        if (number):
-            print player_value
-        
-        print '\nDEALER'
-        print "['" + str(handDealer[0]) + "']"
-        dealer_value = getHand(handDealer[0])
-        if (number):
-            print dealer_value
 
         print '\nYou have ${0:0.2f}'.format(playerMoney)
         while(1):
@@ -116,10 +105,24 @@ def main():
             else:
                 print "\nError. Input is not a valid number.\n"
 
+        print 'PLAYER'
+        print handPlayer
+        player_value = getHand(handPlayer)
+        if (number):
+            print player_value
 
+        print '\nDEALER'
+        print "['" + str(handDealer[0]) + "']"
+        dealer_value = getHand(handDealer[0])
+        if (number):
+            print dealer_value
+
+        if player_value == 21:
+            turnover_player = True
+            turnover_dealer = True
 
         while (turnover_player == False):
-            action = raw_input ('Would you like to hit or stand? (Type "hit", "stand", or "help")\n').lower()
+            action = raw_input ('\nWould you like to hit or stand? (Type "hit", "stand", or "help")\n').lower()
             if (action == 'help'):
                 print ("\nNumbers from 2 to 9 count as face value\n"+
                        "10, Jack, Queen, and King count as 10\n" +
@@ -141,12 +144,19 @@ def main():
                 print "\nError. Input is not valid.\n"
 
         # Dealer's turn
-        while (turnover_dealer == False and bust_dealer == False):
-            dealer_value = getHand(handPlayer)
+        print "\nDealer's hand:"
+        print handDealer
+        if (number):
+            print dealer_value
+        while (turnover_dealer == False and bust_player == False):
+            dealer_value = getHand(handDealer)
             # dealer must hit
             if (dealer_value < 17):
                 hit(handDealer)
                 dealer_value = getHand(handDealer)
+                if (number):
+                    print dealer_value
+            
                 if (dealer_value > 21):
                     bust_dealer = True
                     bust('Dealer')
@@ -155,18 +165,23 @@ def main():
                     turnover_dealer = True
             else:
                 turnover_dealer = True
-                    
-        player_value = getHand(handPlayer)
-        dealer_value = getHand(handDealer)
 
-        if (player_value > dealer_value and bust_player == False or bust_dealer == True):
+
+        if (player_value == 21):
+            print "\nBlackJack!\n"
             print name + " wins!"
             gameNum += 1
             print "Number of games won by " + name + ": " + str(gameNum)
             playerMoney += int(bet)
             print 'You have ${0:0.2f} remaining.'.format(playerMoney)
+        elif (player_value > dealer_value and bust_player == False or bust_dealer == True):
+            print "\n" + name + " wins!"
+            gameNum += 1
+            print "Number of games won by " + name + ": " + str(gameNum)
+            playerMoney += int(bet)
+            print 'You have ${0:0.2f} remaining.'.format(playerMoney)
         else:
-            print "House wins!"
+            print "\nHouse wins!"
             playerMoney -= int(bet)
             print 'You have ${0:0.2f} remaining.'.format(playerMoney)
 
@@ -175,19 +190,11 @@ def main():
             print 'You are out of money!'
             game = False
         else:
-            cont_game = raw_input('Would you like to keep playing? (Y/N)\n').lower()
+            cont_game = raw_input('\nWould you like to keep playing? (Y/N)\n').lower()
             if cont_game  in ('no', 'n'):
                 game = False
             else:
                 os.system('clear')
-
-    
-    
-           #print handPlayer
-           #print getHand(handPlayer)
-    
-           #print dealerPlayer
-           #print getHand(dealerPlayer)
 
 if __name__ == '__main__':
     main()
