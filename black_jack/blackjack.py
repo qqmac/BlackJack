@@ -42,14 +42,14 @@ def getHand(hand):
         else:
             value += int(x)
 
-# if the hand has two aces
-if(value == 2):
-    value = 12
+    # if the hand has two aces
+    if(value == 2):
+        value = 12
     # if there's one ace and it can be 11
     elif('A' in hand and value <= 11):
         value += 10
 
-return value
+    return value
 
 # end result function
 def results(blackjack, player, dealer, bustP, bustD, playerMoney, gameNum, bet, name):
@@ -118,18 +118,18 @@ def main():
         else:
             print ("\nPlease enter either yes or no.\n")
 
-# if player wants to toggle card values
-while(1):
-    Toggle = input ("\nWould you like to see the card values? (Y/N)\n").lower()
+    # if player wants to toggle card values
+    while(1):
+        Toggle = input ("\nWould you like to see the card values? (Y/N)\n").lower()
         if Toggle in ('yes', 'y'):
             break
-    elif Toggle in ('no', 'n'):
-        number = False
+        elif Toggle in ('no', 'n'):
+            number = False
             break
         else:
             print ("\nPlease enter either yes or no.\n")
 
-os.system('clear')
+    os.system('clear')
     
     # Start game
     while(game):
@@ -169,39 +169,39 @@ os.system('clear')
                 Deck.remove(i)
 
 
-# Player's turn
+        # Player's turn
 
-print ('\nYou have ${0:0.2f}'.format(playerMoney))
-    while(1):
-        bet = input ('How much money do you want to bet? (a whole number)\n$')
+        print ('\nYou have ${0:0.2f}'.format(playerMoney))
+        while(1):
+            bet = input ('How much money do you want to bet? (a whole number)\n$')
             if (bet.isdigit()):
                 if (int(bet) > playerMoney):
                     print ("\nYou cannot bet more than $%s.\n" %playerMoney)
                 else:
                     break
-        else:
-            print ("\nError. Input is not a valid number.\n")
-
+            else:
+                print ("\nError. Input is not a valid number.\n")
+            
         # print the first two cards of player
         print ('PLAYER')
         print (handPlayer)
         player_value = getHand(handPlayer)
         if (number):
             print (player_value)
-
-# print one card for dealer
-print ('\nDEALER')
-    print ("['" + str(handDealer[0]) + "']")
+        
+        # print one card for dealer
+        print ('\nDEALER')
+        print ("['" + str(handDealer[0]) + "']")
         dealer_value = getHand(handDealer[0])
         if (number):
             print (dealer_value)
 
-    # automatic black jack
-    if player_value == 21:
-        turnover_player = True
+        # automatic black jack
+        if player_value == 21:
+            turnover_player = True
             turnover_dealer = True
             blackjack = True
-        
+
         # get player's input
         count1 = 1
         while (turnover_player == False):
@@ -223,7 +223,7 @@ print ('\nDEALER')
                 player_value = getHand(handPlayer)
                 if (number):
                     print (player_value)
-                
+            
                 # bust
                 if (player_value > 21):
                     bust_player = True
@@ -232,19 +232,20 @@ print ('\nDEALER')
                 # automatic stand if 21
                 elif (player_value == 21):
                     turnover_player = True
+
             elif (action == 'stand'):
                 turnover_player = True
             else:
                 print ("\nError. Input is not valid.\n")
-
-# Dealer's turn
-print ("\nDealer's hand:")
-    print (handDealer)
+        
+        # Dealer's turn
+        print ("\nDealer's hand:")
+        print (handDealer)
         dealer_value = getHand(handDealer)
         if (number):
             print (dealer_value)
-
-    count = 1
+        
+        count = 1
         while (turnover_dealer == False and bust_player == False):
             
             dealer_value = getHand(handDealer)
@@ -273,17 +274,17 @@ print ("\nDealer's hand:")
                 elif (dealer_value >= 17 and dealer_value <= 21):
                     turnover_dealer = True
             turnover_dealer = True
-
+    
         # grab final card values
         player_value = getHand(handPlayer)
         dealer_value = getHand(handDealer)
-
-# get results
-(playerMoney, gameNum) = results(blackjack, player_value, dealer_value, bust_player, bust_dealer, playerMoney, gameNum, bet, name)
-    
-    # continue playing?
-    if (playerMoney <= 0):
-        print ('You are out of money!')
+        
+        # get results
+        (playerMoney, gameNum) = results(blackjack, player_value, dealer_value, bust_player, bust_dealer, playerMoney, gameNum, bet, name)
+        
+        # continue playing?
+        if (playerMoney <= 0):
+            print ('You are out of money!')
             game = False
         else:
             cont_game = input('\nWould you like to keep playing? (Y/N)\n').lower()
