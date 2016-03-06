@@ -1,20 +1,23 @@
 import random
 import os
+import sys
 import itertools
 
 Ranks = '23456789TJKQKA'
 Deck = tuple(''.join(card) for card in itertools.product(Ranks))
 playerMoney = 1000
+gameNum = 0
 
 #functions
 def bust(name):
-    print "\nBust!\n" + name + " loses.\n"
+    print ("\nBust!\n" + name + " loses.\n")
 
 # add a new card to the hand
 def hit(hand):
     new_card = random.sample(Deck, 1)
     hand.append(new_card[0])
-    print hand
+    print (hand)
+    return hand
 
 # return value of hand
 def getHand(hand):
@@ -37,49 +40,77 @@ def getHand(hand):
 
     return value
 
+# end result function
+def results(blackjack, player, dealer, bustP, bustD, playerMoney, gameNum, bet, name):
+    
+    if (player == 21 and dealer != 21 and blackjack == True):
+        print ("\nBlackJack!\n")
+        print (name + " wins!\n")
+        gameNum += 1
+        print ("Number of games won by " + name + ": " + str(gameNum))
+        playerMoney += int(bet)
+        print ('You have ${0:0.2f} remaining.'.format(playerMoney))
+    elif (player > dealer and bustP == False or bustD == True):
+        print ("\n" + name + " wins!")
+        gameNum += 1
+        print ("Number of games won by " + name + ": " + str(gameNum))
+        playerMoney += int(bet)
+        print ('You have ${0:0.2f} remaining.'.format(playerMoney))
+    elif (player == dealer and bustP == False):
+        print ("\nTie!\n")
+        print ("Number of games won by " + name + ": " + str(gameNum))
+        print ('You have ${0:0.2f} remaining.'.format(playerMoney))
+    else:
+        print ("\nHouse wins!\n")
+        playerMoney -= int(bet)
+        print ("Number of games won by " + name + ": " + str(gameNum))
+        print ('You have ${0:0.2f} remaining.'.format(playerMoney))
+
+    return (playerMoney, gameNum)
+
 
 
 def main():
     os.system('clear')
     global playerMoney
+    global gameNum
     
     game = True
     initial = True
     number = True
-    gameNum = 0
     
     print ("Welcome to Black Jack.\n")
     
     # ask for player's name
-    name = raw_input ("Please enter your name:\n")
+    name = input ("Please enter your name:\n")
     
     # before starting the game, ask the user if they want to change the default money
     while(initial):
-        YN = raw_input ("\nThe default money value is $1000.\nWould you like to set your own value? (Y/N)\n").lower()
+        YN = input ("\nThe default money value is $1000.\nWould you like to set your own value? (Y/N)\n").lower()
         if YN in ('yes', 'y'):
             while(1):
-                new_money = raw_input ("Please enter the money value (a whole number):\n$")
+                new_money = input ("Please enter the money value (a whole number):\n$")
                 if (new_money.isdigit()):
                     playerMoney = int(new_money)
                     initial = False
                     break
                 else:
-                    print "Invalid money value.\n"
+                    print ("Invalid money value.\n")
         elif YN in ('no', 'n'):
             break
         else:
-            print "\nPlease enter either yes or no.\n"
+            print ("\nPlease enter either yes or no.\n")
 
     # if player wants to toggle card values
     while(1):
-        Toggle = raw_input ("\nWould you like to see the card values? (Y/N)\n").lower()
+        Toggle = input ("\nWould you like to see the card values? (Y/N)\n").lower()
         if Toggle in ('yes', 'y'):
             break
         elif Toggle in ('no', 'n'):
             number = False
             break
         else:
-            print "\nPlease enter either yes or no.\n"
+            print ("\nPlease enter either yes or no.\n")
 
     os.system('clear')
     while(game):
@@ -91,38 +122,40 @@ def main():
         turnover_dealer = False
         dealer_value = 0
         player_value = 0
+        blackjack = False
 
         # Player's turn
 
-        print '\nYou have ${0:0.2f}'.format(playerMoney)
+        print ('\nYou have ${0:0.2f}'.format(playerMoney))
         while(1):
-            bet = raw_input ('How much money do you want to bet? (a whole number)\n$')
+            bet = input ('How much money do you want to bet? (a whole number)\n$')
             if (bet.isdigit()):
                 if (int(bet) > playerMoney):
-                    print "\nYou cannot bet more than $%s.\n" %playerMoney
+                    print ("\nYou cannot bet more than $%s.\n") %playerMoney
                 else:
                     break
             else:
-                print "\nError. Input is not a valid number.\n"
+                print ("\nError. Input is not a valid number.\n")
 
-        print 'PLAYER'
-        print handPlayer
+        print ('PLAYER')
+        print (handPlayer)
         player_value = getHand(handPlayer)
         if (number):
-            print player_value
+            print (player_value)
 
-        print '\nDEALER'
-        print "['" + str(handDealer[0]) + "']"
+        print ('\nDEALER')
+        print ("['" + str(handDealer[0]) + "']")
         dealer_value = getHand(handDealer[0])
         if (number):
-            print dealer_value
+            print (dealer_value)
 
         if player_value == 21:
             turnover_player = True
             turnover_dealer = True
+            blackjack = True
 
         while (turnover_player == False):
-            action = raw_input ('\nWould you like to hit or stand? (Type "hit", "stand", or "help")\n').lower()
+            action = input ('\nWould you like to hit or stand? (Type "hit", "stand", or "help")\n').lower()
             if (action == 'help'):
                 print ("\nNumbers from 2 to 9 count as face value\n"+
                        "10, Jack, Queen, and King count as 10\n" +
@@ -131,66 +164,54 @@ def main():
                 hit(handPlayer)
                 player_value = getHand(handPlayer)
                 if (number):
-                    print player_value
+                    print (player_value)
                 
                 # bust
                 if (player_value > 21):
                     bust_player = True
                     bust(name)
                     break
+                elif (player_value == 21):
+                    turnover_player = True
             elif (action == 'stand'):
                 turnover_player = True
             else:
-                print "\nError. Input is not valid.\n"
+                print ("\nError. Input is not valid.\n")
 
         # Dealer's turn
-        print "\nDealer's hand:"
-        print handDealer
+        print ("\nDealer's hand:")
+        print (handDealer)
+        dealer_value = getHand(handDealer)
         if (number):
-            print dealer_value
+            print (dealer_value)
         while (turnover_dealer == False and bust_player == False):
             dealer_value = getHand(handDealer)
             # dealer must hit
-            if (dealer_value < 17):
+            while (dealer_value < 17):
                 hit(handDealer)
                 dealer_value = getHand(handDealer)
                 if (number):
-                    print dealer_value
+                    print (dealer_value)
             
                 if (dealer_value > 21):
                     bust_dealer = True
                     bust('Dealer')
                     break
-                else:
+                elif (dealer_value >= 17 and dealer_value <= 21):
                     turnover_dealer = True
-            else:
-                turnover_dealer = True
+            turnover_dealer = True
 
+        player_value = getHand(handPlayer)
+        dealer_value = getHand(handDealer)
 
-        if (player_value == 21):
-            print "\nBlackJack!\n"
-            print name + " wins!"
-            gameNum += 1
-            print "Number of games won by " + name + ": " + str(gameNum)
-            playerMoney += int(bet)
-            print 'You have ${0:0.2f} remaining.'.format(playerMoney)
-        elif (player_value > dealer_value and bust_player == False or bust_dealer == True):
-            print "\n" + name + " wins!"
-            gameNum += 1
-            print "Number of games won by " + name + ": " + str(gameNum)
-            playerMoney += int(bet)
-            print 'You have ${0:0.2f} remaining.'.format(playerMoney)
-        else:
-            print "\nHouse wins!"
-            playerMoney -= int(bet)
-            print 'You have ${0:0.2f} remaining.'.format(playerMoney)
+        (playerMoney, gameNum) = results(blackjack, player_value, dealer_value, bust_player, bust_dealer, playerMoney, gameNum, bet, name)
 
         # continue playing?
         if (playerMoney <= 0):
-            print 'You are out of money!'
+            print ('You are out of money!')
             game = False
         else:
-            cont_game = raw_input('\nWould you like to keep playing? (Y/N)\n').lower()
+            cont_game = input('\nWould you like to keep playing? (Y/N)\n').lower()
             if cont_game  in ('no', 'n'):
                 game = False
             else:

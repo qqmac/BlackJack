@@ -8,12 +8,14 @@
 
 /* Begin PBXFileReference section */
 		90323FF21C8787A4009BFE64 /* blackjack.py */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.python; path = blackjack.py; sourceTree = "<group>"; };
+		90EDFEC51C8A4B5B00D2A1DD /* test.py */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.python; path = test.py; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXGroup section */
 		90323FE71C878736009BFE64 = {
 			isa = PBXGroup;
 			children = (
+				90EDFEC51C8A4B5B00D2A1DD /* test.py */,
 				90323FF21C8787A4009BFE64 /* blackjack.py */,
 			);
 			sourceTree = "<group>";
@@ -180,6 +182,7 @@
 				90323FF11C878736009BFE64 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
