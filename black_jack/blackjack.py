@@ -3,8 +3,8 @@ import os
 import sys
 import itertools
 
-Ranks = '23456789TJKQKA'
-Deck = tuple(''.join(card) for card in itertools.product(Ranks))
+Ranks = '22223333444455556666777788889999TTTTJJJJQQQQKKKKAAAA'
+Deck = list(''.join(card) for card in itertools.product(Ranks))
 playerMoney = 1000
 gameNum = 0
 
@@ -14,8 +14,17 @@ def bust(name):
 
 # add a new card to the hand
 def hit(hand):
-    new_card = random.sample(Deck, 1)
-    hand.append(new_card[0])
+    global Deck
+    
+    if Deck:# not empty
+        new_card = random.sample(Deck, 1)
+        hand.append(new_card[0])
+    else:# make new deck
+        Ranks = '22223333444455556666777788889999TTTTJJJJQQQQKKKKAAAA'
+        Deck = list(''.join(card) for card in itertools.product(Ranks))
+        new_card = random.sample(Deck, 1)
+        hand.append(new_card[0])
+
     print (hand)
     return hand
 
@@ -72,8 +81,10 @@ def results(blackjack, player, dealer, bustP, bustD, playerMoney, gameNum, bet, 
 
 def main():
     os.system('clear')
+    
     global playerMoney
     global gameNum
+    global Deck
     
     game = True
     initial = True
@@ -114,8 +125,42 @@ def main():
 
     os.system('clear')
     while(game):
-        handPlayer = random.sample(Deck, 2);
-        handDealer = random.sample(Deck, 2);
+        if Deck:
+            handPlayer = random.sample(Deck, 2);
+        else:
+            Ranks = '22223333444455556666777788889999TTTTJJJJQQQQKKKKAAAA'
+            Deck = list(''.join(card) for card in itertools.product(Ranks))
+            handPlayer = random.sample(Deck, 2);
+        
+        
+        print (Deck)
+        
+        for i in handPlayer:
+            if Deck:# not empty
+                Deck.remove(i)
+            else:# make new deck
+                Ranks = '22223333444455556666777788889999TTTTJJJJQQQQKKKKAAAA'
+                Deck = list(''.join(card) for card in itertools.product(Ranks))
+                Deck.remove(i)
+
+        if Deck:
+            handDealer = random.sample(Deck, 2);
+        else:
+            Ranks = '22223333444455556666777788889999TTTTJJJJQQQQKKKKAAAA'
+            Deck = list(''.join(card) for card in itertools.product(Ranks))
+            handDealer = random.sample(Deck, 2);
+
+        for i in handDealer:
+            if Deck:# not empty
+                Deck.remove(i)
+            else:# make new deck
+                Ranks = '22223333444455556666777788889999TTTTJJJJQQQQKKKKAAAA'
+                Deck = list(''.join(card) for card in itertools.product(Ranks))
+                Deck.remove(i)
+
+        print (Deck)
+
+
         bust_player = False
         bust_dealer = False
         turnover_player = False
@@ -154,7 +199,9 @@ def main():
             turnover_dealer = True
             blackjack = True
 
+        count1 = 1
         while (turnover_player == False):
+            
             action = input ('\nWould you like to hit or stand? (Type "hit", "stand", or "help")\n').lower()
             if (action == 'help'):
                 print ("\nNumbers from 2 to 9 count as face value\n"+
@@ -162,6 +209,14 @@ def main():
                        "Ace counts as either 1 or 10\n")
             elif (action == 'hit'):
                 hit(handPlayer)
+                count1 += 1
+                if Deck:# not empty
+                    Deck.remove(handPlayer[count1])
+                else:# make new deck
+                    Ranks = '22223333444455556666777788889999TTTTJJJJQQQQKKKKAAAA'
+                    Deck = list(''.join(card) for card in itertools.product(Ranks))
+                    Deck.remove(handPlayer[count1])
+                
                 player_value = getHand(handPlayer)
                 if (number):
                     print (player_value)
@@ -184,11 +239,23 @@ def main():
         dealer_value = getHand(handDealer)
         if (number):
             print (dealer_value)
+        
+        count = 1
         while (turnover_dealer == False and bust_player == False):
+            
             dealer_value = getHand(handDealer)
             # dealer must hit
             while (dealer_value < 17):
                 hit(handDealer)
+                count += 1
+                if Deck:# not empty
+                    Deck.remove(handDealer[count])
+                else:# make new deck
+                    Ranks = '22223333444455556666777788889999TTTTJJJJQQQQKKKKAAAA'
+                    Deck = list(''.join(card) for card in itertools.product(Ranks))
+                    Deck.remove(handDealer[count])
+                
+                print (Deck)
                 dealer_value = getHand(handDealer)
                 if (number):
                     print (dealer_value)
