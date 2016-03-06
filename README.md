@@ -4,6 +4,11 @@
 
 This is a Black Jack game that is coded with Python 3.5.1. It was ran and tested through the terminal.
 
+## Files
+
+- test.py
+- blackjack.py
+
 ## Rules
 
 - There are 2 players, the human player and a dealer
