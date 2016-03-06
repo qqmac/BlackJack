@@ -125,13 +125,10 @@ def main():
 
     os.system('clear')
     while(game):
-        if Deck:
-            handPlayer = random.sample(Deck, 2);
-        else:
-            Ranks = '22223333444455556666777788889999TTTTJJJJQQQQKKKKAAAA'
-            Deck = list(''.join(card) for card in itertools.product(Ranks))
-            handPlayer = random.sample(Deck, 2);
+        Ranks = '22223333444455556666777788889999TTTTJJJJQQQQKKKKAAAA'
+        Deck = list(''.join(card) for card in itertools.product(Ranks))
         
+        handPlayer = random.sample(Deck, 2)
         
         print (Deck)
         
@@ -143,12 +140,7 @@ def main():
                 Deck = list(''.join(card) for card in itertools.product(Ranks))
                 Deck.remove(i)
 
-        if Deck:
-            handDealer = random.sample(Deck, 2);
-        else:
-            Ranks = '22223333444455556666777788889999TTTTJJJJQQQQKKKKAAAA'
-            Deck = list(''.join(card) for card in itertools.product(Ranks))
-            handDealer = random.sample(Deck, 2);
+        handDealer = random.sample(Deck, 2);
 
         for i in handDealer:
             if Deck:# not empty
